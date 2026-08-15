@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Producto</title>
+</head>
+<body>
+
+<h1 th:text="${product.id == null ? 'Nuevo Producto' : 'Editar Producto'}"></h1>
+
+<form th:action="@{/products/save}" th:object="${product}" method="post">
+
+    <input type="hidden" th:field="*{id}">
+
+    <div>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" th:field="*{name}" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="description">Descripción:</label>
+        <textarea id="description" th:field="*{description}"></textarea>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="price">Precio:</label>
+        <input type="number"
+               id="price"
+               th:field="*{price}"
+               step="0.01"
+               min="0"
+               required>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="stock">Stock:</label>
+        <input type="number"
+               id="stock"
+               th:field="*{stock}"
+               min="0"
+               required>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="category">Categoría:</label>
+
+        <select id="category" th:field="*{category}" required>
+
+            <option value="">Seleccione una categoría</option>
+
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}">
+            </option>
+
+        </select>
+    </div>
+
+    <br>
+
+    <button type="submit">Guardar</button>
+
+    <a th:href="@{/products}">Cancelar</a>
+
+</form>
+
+</body>
+</html>
