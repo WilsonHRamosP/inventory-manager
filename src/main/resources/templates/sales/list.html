@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ventas</title>
+</head>
+
+<body>
+
+<h1>Lista de Ventas</h1>
+
+<a th:href="@{/sales/new}">Nueva Venta</a>
+
+<br><br>
+
+<table border="1">
+
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr th:each="sale : ${sales}">
+
+        <td th:text="${sale.id}"></td>
+
+        <td th:text="${sale.date}"></td>
+
+        <td th:text="${sale.total}"></td>
+
+        <td>
+
+            <a th:href="@{/sales/view/{id}(id=${sale.id})}">
+                Ver
+            </a>
+
+            |
+
+            <a th:href="@{/sales/edit/{id}(id=${sale.id})}">
+                Editar
+            </a>
+
+            |
+
+            <a th:href="@{/sales/delete/{id}(id=${sale.id})}"
+               onclick="return confirm('¿Está seguro de eliminar esta venta?')">
+                Eliminar
+            </a>
+
+        </td>
+
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(sales)}">
+
+        <td colspan="4">
+            No hay ventas registradas.
+        </td>
+
+    </tr>
+
+    </tbody>
+
+</table>
+
+</body>
+
+</html>

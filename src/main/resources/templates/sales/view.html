@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Venta</title>
+</head>
+
+<body>
+
+<h1>Detalle de Venta</h1>
+
+<p>
+    <strong>Venta #:</strong>
+    <span th:text="${sale.id}"></span>
+</p>
+
+<p>
+    <strong>Fecha:</strong>
+    <span th:text="${sale.date}"></span>
+</p>
+
+<h2>Productos</h2>
+
+<table border="1">
+
+    <thead>
+    <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th>Subtotal</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr th:each="item : ${sale.items}">
+
+        <td th:text="${item.product.name}"></td>
+
+        <td th:text="${item.quantity}"></td>
+
+        <td th:text="${item.price}"></td>
+
+        <td th:text="${item.subtotal}"></td>
+
+    </tr>
+
+    </tbody>
+
+</table>
+
+<br>
+
+<h2>
+    Total:
+    $<span th:text="${sale.total}"></span>
+</h2>
+
+<br>
+
+<a th:href="@{/sales}">
+    Volver a ventas
+</a>
+
+</body>
+
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Venta</title>
+</head>
+
+<body>
+
+<h1 th:text="${sale.id == null ? 'Nueva Venta' : 'Editar Venta'}"></h1>
+
+<form th:action="@{/sales/save}" method="post">
+
+    <input type="hidden" name="id" th:value="${sale.id}">
+
+    <label>Fecha:</label>
+
+    <input type="datetime-local"
+           name="date"
+           th:value="${sale.date != null ? #temporals.format(sale.date, 'yyyy-MM-dd''T''HH:mm') : ''}"
+           required>
+
+    <br><br>
+
+    <h2>Productos</h2>
+
+    <div id="items-container">
+
+        <div class="sale-item">
+
+            <label>Producto:</label>
+
+            <select name="items[0].product.id"
+                    onchange="updateMaxStock(this)"
+                    required>
+
+                <option value="">-- Seleccione un producto --</option>
+
+                <option th:each="product : ${products}"
+                        th:value="${product.id}"
+                        th:data-stock="${product.stock}"
+                        th:text="${product.name + ' - $' + product.price + ' | Stock disponible: ' + product.stock}">
+                </option>
+
+            </select>
+
+            <label>Cantidad:</label>
+
+            <input type="number"
+                   name="items[0].quantity"
+                   min="1"
+                   value="1"
+                   required>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <button type="button" onclick="addItem()">
+        + Agregar producto
+    </button>
+
+    <br><br>
+
+    <button type="submit">
+        Guardar Venta
+    </button>
+
+    <a th:href="@{/sales}">
+        Cancelar
+    </a>
+
+</form>
+
+
+<select id="product-template" style="display:none;">
+
+    <option value="">-- Seleccione un producto --</option>
+
+    <option th:each="product : ${products}"
+            th:value="${product.id}"
+            th:data-stock="${product.stock}"
+            th:text="${product.name + ' - $' + product.price + ' | Stock disponible: ' + product.stock}">
+    </option>
+
+</select>
+
+
+<script>
+
+    let itemIndex = 1;
+
+    function updateMaxStock(select) {
+
+        const selectedOption =
+            select.options[select.selectedIndex];
+
+        const stock =
+            selectedOption.getAttribute("data-stock");
+
+        const item =
+            select.closest(".sale-item");
+
+        const quantity =
+            item.querySelector('input[type="number"]');
+
+        if (stock) {
+
+            quantity.max = stock;
+
+            if (parseInt(quantity.value) > parseInt(stock)) {
+                quantity.value = stock;
+            }
+        }
+    }
+
+
+    function getSelectedProducts() {
+
+        const selects =
+            document.querySelectorAll(
+                '#items-container select'
+            );
+
+        const selected = [];
+
+        selects.forEach(function(select) {
+
+            if (select.value !== "") {
+                selected.push(select.value);
+            }
+
+        });
+
+        return selected;
+    }
+
+
+    function validateProduct(select) {
+
+        const selectedProducts =
+            getSelectedProducts();
+
+        const currentValue =
+            select.value;
+
+        let count = 0;
+
+        selectedProducts.forEach(function(productId) {
+
+            if (productId === currentValue) {
+                count++;
+            }
+
+        });
+
+        if (count > 1) {
+
+            alert(
+                "Este producto ya fue agregado a la venta."
+            );
+
+            select.value = "";
+
+            updateMaxStock(select);
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function addItem() {
+
+        const container =
+            document.getElementById("items-container");
+
+        const productTemplate =
+            document.getElementById("product-template");
+
+        const item =
+            document.createElement("div");
+
+        item.classList.add("sale-item");
+
+
+        const select =
+            document.createElement("select");
+
+        select.name =
+            "items[" + itemIndex + "].product.id";
+
+        select.required = true;
+
+        select.innerHTML =
+            productTemplate.innerHTML;
+
+
+        select.onchange = function() {
+
+            if (validateProduct(this)) {
+                updateMaxStock(this);
+            }
+
+        };
+
+
+        const quantity =
+            document.createElement("input");
+
+        quantity.type = "number";
+
+        quantity.name =
+            "items[" + itemIndex + "].quantity";
+
+        quantity.min = "1";
+
+        quantity.value = "1";
+
+        quantity.required = true;
+
+
+        const removeButton =
+            document.createElement("button");
+
+        removeButton.type = "button";
+
+        removeButton.textContent = "Eliminar";
+
+        removeButton.onclick = function() {
+            item.remove();
+        };
+
+
+        item.appendChild(
+            document.createElement("br")
+        );
+
+        item.appendChild(
+            document.createTextNode("Producto: ")
+        );
+
+        item.appendChild(select);
+
+        item.appendChild(
+            document.createTextNode(" Cantidad: ")
+        );
+
+        item.appendChild(quantity);
+
+        item.appendChild(
+            document.createTextNode(" ")
+        );
+
+        item.appendChild(removeButton);
+
+        container.appendChild(item);
+
+        itemIndex++;
+    }
+
+
+    // Validar también antes de enviar
+
+    document.querySelector("form").addEventListener(
+        "submit",
+        function(event) {
+
+            const selectedProducts =
+                getSelectedProducts();
+
+            const uniqueProducts =
+                new Set(selectedProducts);
+
+            if (selectedProducts.length !== uniqueProducts.size) {
+
+                event.preventDefault();
+
+                alert(
+                    "No puedes agregar el mismo producto más de una vez."
+                );
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+
+</html>
