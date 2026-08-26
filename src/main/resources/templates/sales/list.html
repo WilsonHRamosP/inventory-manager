@@ -3,72 +3,236 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Ventas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ventas - Inventory Manager</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #212529;
+            color: white;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header p {
+            margin-bottom: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .top-bar h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            background-color: #212529;
+        }
+
+        .btn:hover {
+            background-color: #343a40;
+        }
+
+        .table-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f6f8;
+            color: #555;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        .view {
+            color: #198754;
+        }
+
+        .edit {
+            color: #0d6efd;
+        }
+
+        .delete {
+            color: #dc3545;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .navigation {
+            margin-top: 30px;
+        }
+
+        .navigation a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            background-color: #212529;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .navigation a:hover {
+            background-color: #343a40;
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>Lista de Ventas</h1>
+<div class="header">
+    <h1>Inventory Manager</h1>
+    <p>Gestión de Ventas</p>
+</div>
 
-<a th:href="@{/sales/new}">Nueva Venta</a>
+<div class="container">
 
-<br><br>
+    <div class="top-bar">
 
-<table border="1">
+        <h2>🧾 Ventas</h2>
 
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Fecha</th>
-        <th>Total</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
+        <a class="btn" th:href="@{/sales/new}">
+            + Nueva venta
+        </a>
 
-    <tbody>
+    </div>
 
-    <tr th:each="sale : ${sales}">
+    <div class="table-container">
 
-        <td th:text="${sale.id}"></td>
+        <table th:if="${!#lists.isEmpty(sales)}">
 
-        <td th:text="${sale.date}"></td>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
 
-        <td th:text="${sale.total}"></td>
+            <tbody>
 
-        <td>
+            <tr th:each="sale : ${sales}">
 
-            <a th:href="@{/sales/view/{id}(id=${sale.id})}">
-                Ver
-            </a>
+                <td th:text="${sale.id}">
+                    1
+                </td>
 
-            |
+                <td th:text="${sale.date}">
+                    2026-08-26
+                </td>
 
-            <a th:href="@{/sales/edit/{id}(id=${sale.id})}">
-                Editar
-            </a>
+                <td class="total">
+                    $<span th:text="${sale.total}">
+                        0.00
+                    </span>
+                </td>
 
-            |
+                <td class="actions">
 
-            <a th:href="@{/sales/delete/{id}(id=${sale.id})}"
-               onclick="return confirm('¿Está seguro de eliminar esta venta?')">
-                Eliminar
-            </a>
+                    <a class="view"
+                       th:href="@{/sales/view/{id}(id=${sale.id})}">
+                        👁️ Ver
+                    </a>
 
-        </td>
+                    <a class="edit"
+                       th:href="@{/sales/edit/{id}(id=${sale.id})}">
+                        ✏️ Editar
+                    </a>
 
-    </tr>
+                    <a class="delete"
+                       th:href="@{/sales/delete/{id}(id=${sale.id})}"
+                       onclick="return confirm('¿Está seguro de eliminar esta venta?')">
+                        🗑️ Eliminar
+                    </a>
 
-    <tr th:if="${#lists.isEmpty(sales)}">
+                </td>
 
-        <td colspan="4">
-            No hay ventas registradas.
-        </td>
+            </tr>
 
-    </tr>
+            </tbody>
 
-    </tbody>
+        </table>
 
-</table>
+        <div class="empty"
+             th:if="${#lists.isEmpty(sales)}">
+
+            🧾 No hay ventas registradas.
+
+        </div>
+
+    </div>
+
+    <div class="navigation">
+
+        <a href="/dashboard">Dashboard</a>
+
+        <a href="/products">Productos</a>
+
+        <a href="/categories">Categorías</a>
+
+        <a href="/sales">Ventas</a>
+
+    </div>
+
+</div>
 
 </body>
 

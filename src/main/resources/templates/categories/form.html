@@ -1,33 +1,201 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Categoría</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${category.id == null ? 'Nueva Categoría' : 'Editar Categoría'}">
+        Categoría - Inventory Manager
+    </title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #212529;
+            color: white;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header p {
+            margin-bottom: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 30px auto;
+        }
+
+        .form-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-card h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #212529;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-save {
+            background-color: #212529;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #343a40;
+        }
+
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #5c636a;
+        }
+
+        .navigation {
+            margin-top: 30px;
+        }
+
+        .navigation a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            background-color: #212529;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .navigation a:hover {
+            background-color: #343a40;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Categoría</h1>
+<div class="header">
+    <h1>Inventory Manager</h1>
+    <p>Gestión de Categorías</p>
+</div>
 
-<form th:action="${category.id == null}
-        ? @{/categories}
-        : @{/categories/update/{id}(id=${category.id})}"
-      th:object="${category}"
-      method="post">
+<div class="container">
 
-    <label for="name">Nombre:</label>
+    <div class="form-card">
 
-    <input
-            type="text"
-            id="name"
-            th:field="*{name}"
-            required
-    >
+        <h2 th:text="${category.id == null ? '🏷️ Nueva Categoría' : '✏️ Editar Categoría'}">
+            Categoría
+        </h2>
 
-    <button type="submit">Guardar</button>
+        <form th:action="${category.id == null}
+                ? @{/categories}
+                : @{/categories/update/{id}(id=${category.id})}"
+              th:object="${category}"
+              method="post">
 
-</form>
+            <div class="form-group">
 
-<a href="/categories">Volver</a>
+                <label for="name">
+                    Nombre de la categoría:
+                </label>
+
+                <input
+                        type="text"
+                        id="name"
+                        th:field="*{name}"
+                        placeholder="Ingrese el nombre de la categoría"
+                        required
+                >
+
+            </div>
+
+            <div class="buttons">
+
+                <button type="submit"
+                        class="btn btn-save">
+                    💾 Guardar
+                </button>
+
+                <a href="/categories"
+                   class="btn btn-cancel">
+                    ↩️ Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="navigation">
+
+        <a href="/dashboard">Dashboard</a>
+
+        <a href="/products">Productos</a>
+
+        <a href="/categories">Categorías</a>
+
+        <a href="/sales">Ventas</a>
+
+    </div>
+
+</div>
 
 </body>
+
 </html>

@@ -3,66 +3,356 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Detalle de Venta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Detalle de Venta - Inventory Manager</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #212529;
+            color: white;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header p {
+            margin-bottom: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .sale-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sale-header {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sale-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .sale-info {
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .sale-info strong {
+            color: #333;
+        }
+
+        .products-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f6f8;
+            color: #555;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .number {
+            text-align: right;
+        }
+
+        .total-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            text-align: right;
+        }
+
+        .total-label {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .total-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #212529;
+            margin-left: 10px;
+        }
+
+        .buttons {
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .btn-back {
+            background-color: #212529;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #343a40;
+        }
+
+        .btn-edit {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #0b5ed7;
+        }
+
+        .navigation {
+            margin-top: 30px;
+        }
+
+        .navigation a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            background-color: #212529;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .navigation a:hover {
+            background-color: #343a40;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 95%;
+            }
+
+            .sale-card {
+                padding: 20px;
+            }
+
+            .total-section {
+                text-align: left;
+            }
+
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>Detalle de Venta</h1>
+<div class="header">
 
-<p>
-    <strong>Venta #:</strong>
-    <span th:text="${sale.id}"></span>
-</p>
+    <h1>Inventory Manager</h1>
 
-<p>
-    <strong>Fecha:</strong>
-    <span th:text="${sale.date}"></span>
-</p>
+    <p>Detalle de Venta</p>
 
-<h2>Productos</h2>
+</div>
 
-<table border="1">
 
-    <thead>
-    <tr>
-        <th>Producto</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-        <th>Subtotal</th>
-    </tr>
-    </thead>
+<div class="container">
 
-    <tbody>
+    <div class="sale-card">
 
-    <tr th:each="item : ${sale.items}">
+        <div class="sale-header">
 
-        <td th:text="${item.product.name}"></td>
+            <h2>
+                🧾 Venta #
+                <span th:text="${sale.id}">
+                    3
+                </span>
+            </h2>
 
-        <td th:text="${item.quantity}"></td>
+        </div>
 
-        <td th:text="${item.price}"></td>
 
-        <td th:text="${item.subtotal}"></td>
+        <div class="sale-info">
 
-    </tr>
+            <p>
+                <strong>📅 Fecha:</strong>
 
-    </tbody>
+                <span th:text="${sale.date}">
+                    2026-08-18T11:58
+                </span>
+            </p>
 
-</table>
+        </div>
 
-<br>
 
-<h2>
-    Total:
-    $<span th:text="${sale.total}"></span>
-</h2>
+        <h2 class="products-title">
+            🛒 Productos
+        </h2>
 
-<br>
 
-<a th:href="@{/sales}">
-    Volver a ventas
-</a>
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                <tr>
+
+                    <th>Producto</th>
+
+                    <th class="number">
+                        Cantidad
+                    </th>
+
+                    <th class="number">
+                        Precio
+                    </th>
+
+                    <th class="number">
+                        Subtotal
+                    </th>
+
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="item : ${sale.items}">
+
+                    <td th:text="${item.product.name}">
+                        Moto
+                    </td>
+
+                    <td class="number"
+                        th:text="${item.quantity}">
+                        1
+                    </td>
+
+                    <td class="number">
+
+                        $
+                        <span th:text="${item.price}">
+                            20000.00
+                        </span>
+
+                    </td>
+
+                    <td class="number">
+
+                        $
+                        <span th:text="${item.subtotal}">
+                            20000.00
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="total-section">
+
+            <span class="total-label">
+                Total:
+            </span>
+
+            <span class="total-value">
+
+                $
+                <span th:text="${sale.total}">
+                    20000.00
+                </span>
+
+            </span>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <a class="btn btn-back"
+               th:href="@{/sales}">
+
+                ↩️ Volver a ventas
+
+            </a>
+
+            <a class="btn btn-edit"
+               th:href="@{/sales/edit/{id}(id=${sale.id})}">
+
+                ✏️ Editar venta
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="navigation">
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/products">
+            Productos
+        </a>
+
+        <a href="/categories">
+            Categorías
+        </a>
+
+        <a href="/sales">
+            Ventas
+        </a>
+
+    </div>
+
+</div>
 
 </body>
 

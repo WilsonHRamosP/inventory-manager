@@ -3,87 +3,357 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Venta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${sale.id == null ? 'Nueva Venta' : 'Editar Venta'}">
+        Venta - Inventory Manager
+    </title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #212529;
+            color: white;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header p {
+            margin-bottom: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        .form-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-card h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #212529;
+        }
+
+        .products-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .sale-item {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .sale-item label {
+            margin-top: 10px;
+        }
+
+        .sale-item label:first-child {
+            margin-top: 0;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 1fr 180px auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .item-field label {
+            margin-top: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-add {
+            background-color: #198754;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .btn-add:hover {
+            background-color: #157347;
+        }
+
+        .btn-remove {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-remove:hover {
+            background-color: #bb2d3b;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-save {
+            background-color: #212529;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #343a40;
+        }
+
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #5c636a;
+        }
+
+        .navigation {
+            margin-top: 30px;
+        }
+
+        .navigation a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            background-color: #212529;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .navigation a:hover {
+            background-color: #343a40;
+        }
+
+        @media (max-width: 700px) {
+
+            .item-row {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+        }
+    </style>
 </head>
 
 <body>
 
-<h1 th:text="${sale.id == null ? 'Nueva Venta' : 'Editar Venta'}"></h1>
+<div class="header">
+    <h1>Inventory Manager</h1>
+    <p>Gestión de Ventas</p>
+</div>
 
-<form th:action="@{/sales/save}" method="post">
+<div class="container">
 
-    <input type="hidden" name="id" th:value="${sale.id}">
+    <div class="form-card">
 
-    <label>Fecha:</label>
+        <h2 th:text="${sale.id == null ? '🧾 Nueva Venta' : '✏️ Editar Venta'}">
+            Venta
+        </h2>
 
-    <input type="datetime-local"
-           name="date"
-           th:value="${sale.date != null ? #temporals.format(sale.date, 'yyyy-MM-dd''T''HH:mm') : ''}"
-           required>
+        <form th:action="@{/sales/save}" method="post">
 
-    <br><br>
+            <input type="hidden"
+                   name="id"
+                   th:value="${sale.id}">
 
-    <h2>Productos</h2>
+            <!-- FECHA -->
 
-    <div id="items-container">
+            <div class="form-group">
 
-        <div class="sale-item">
+                <label for="date">
+                    Fecha de la venta:
+                </label>
 
-            <label>Producto:</label>
+                <input type="datetime-local"
+                       id="date"
+                       name="date"
+                       th:value="${sale.date != null ? #temporals.format(sale.date, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                       required>
 
-            <select name="items[0].product.id"
-                    onchange="updateMaxStock(this)"
-                    required>
+            </div>
 
-                <option value="">-- Seleccione un producto --</option>
 
-                <option th:each="product : ${products}"
-                        th:value="${product.id}"
-                        th:data-stock="${product.stock}"
-                        th:text="${product.name + ' - $' + product.price + ' | Stock disponible: ' + product.stock}">
-                </option>
+            <!-- PRODUCTOS -->
 
-            </select>
+            <h2 class="products-title">
+                🛒 Productos
+            </h2>
 
-            <label>Cantidad:</label>
+            <div id="items-container">
 
-            <input type="number"
-                   name="items[0].quantity"
-                   min="1"
-                   value="1"
-                   required>
+                <div class="sale-item">
 
-        </div>
+                    <div class="item-row">
+
+                        <div class="item-field">
+
+                            <label>
+                                Producto:
+                            </label>
+
+                            <select name="items[0].product.id"
+                                    onchange="updateMaxStock(this)"
+                                    required>
+
+                                <option value="">
+                                    -- Seleccione un producto --
+                                </option>
+
+                                <option th:each="product : ${products}"
+                                        th:value="${product.id}"
+                                        th:data-stock="${product.stock}"
+                                        th:text="${product.name + ' - $' + product.price + ' | Stock: ' + product.stock}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="item-field">
+
+                            <label>
+                                Cantidad:
+                            </label>
+
+                            <input type="number"
+                                   name="items[0].quantity"
+                                   min="1"
+                                   value="1"
+                                   required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AGREGAR PRODUCTO -->
+
+            <button type="button"
+                    class="btn btn-add"
+                    onclick="addItem()">
+
+                + Agregar producto
+
+            </button>
+
+
+            <!-- BOTONES -->
+
+            <div class="buttons">
+
+                <button type="submit"
+                        class="btn btn-save">
+
+                    💾 Guardar venta
+
+                </button>
+
+                <a th:href="@{/sales}"
+                   class="btn btn-cancel">
+
+                    ↩️ Cancelar
+
+                </a>
+
+            </div>
+
+        </form>
 
     </div>
 
-    <br>
 
-    <button type="button" onclick="addItem()">
-        + Agregar producto
-    </button>
+    <!-- NAVEGACIÓN -->
 
-    <br><br>
+    <div class="navigation">
 
-    <button type="submit">
-        Guardar Venta
-    </button>
+        <a href="/dashboard">Dashboard</a>
 
-    <a th:href="@{/sales}">
-        Cancelar
-    </a>
+        <a href="/products">Productos</a>
 
-</form>
+        <a href="/categories">Categorías</a>
 
+        <a href="/sales">Ventas</a>
+
+    </div>
+
+</div>
+
+
+<!-- PLANTILLA DE PRODUCTOS -->
 
 <select id="product-template" style="display:none;">
 
-    <option value="">-- Seleccione un producto --</option>
+    <option value="">
+        -- Seleccione un producto --
+    </option>
 
     <option th:each="product : ${products}"
             th:value="${product.id}"
             th:data-stock="${product.stock}"
-            th:text="${product.name + ' - $' + product.price + ' | Stock disponible: ' + product.stock}">
+            th:text="${product.name + ' - $' + product.price + ' | Stock: ' + product.stock}">
     </option>
 
 </select>
@@ -92,6 +362,7 @@
 <script>
 
     let itemIndex = 1;
+
 
     function updateMaxStock(select) {
 
@@ -112,9 +383,13 @@
             quantity.max = stock;
 
             if (parseInt(quantity.value) > parseInt(stock)) {
+
                 quantity.value = stock;
+
             }
+
         }
+
     }
 
 
@@ -130,12 +405,15 @@
         selects.forEach(function(select) {
 
             if (select.value !== "") {
+
                 selected.push(select.value);
+
             }
 
         });
 
         return selected;
+
     }
 
 
@@ -152,7 +430,9 @@
         selectedProducts.forEach(function(productId) {
 
             if (productId === currentValue) {
+
                 count++;
+
             }
 
         });
@@ -168,9 +448,11 @@
             updateMaxStock(select);
 
             return false;
+
         }
 
         return true;
+
     }
 
 
@@ -188,6 +470,25 @@
         item.classList.add("sale-item");
 
 
+        const row =
+            document.createElement("div");
+
+        row.classList.add("item-row");
+
+
+        const productField =
+            document.createElement("div");
+
+        productField.classList.add("item-field");
+
+
+        const productLabel =
+            document.createElement("label");
+
+        productLabel.textContent =
+            "Producto:";
+
+
         const select =
             document.createElement("select");
 
@@ -203,10 +504,30 @@
         select.onchange = function() {
 
             if (validateProduct(this)) {
+
                 updateMaxStock(this);
+
             }
 
         };
+
+
+        productField.appendChild(productLabel);
+
+        productField.appendChild(select);
+
+
+        const quantityField =
+            document.createElement("div");
+
+        quantityField.classList.add("item-field");
+
+
+        const quantityLabel =
+            document.createElement("label");
+
+        quantityLabel.textContent =
+            "Cantidad:";
 
 
         const quantity =
@@ -224,47 +545,46 @@
         quantity.required = true;
 
 
+        quantityField.appendChild(quantityLabel);
+
+        quantityField.appendChild(quantity);
+
+
         const removeButton =
             document.createElement("button");
 
         removeButton.type = "button";
 
-        removeButton.textContent = "Eliminar";
+        removeButton.classList.add("btn");
+
+        removeButton.classList.add("btn-remove");
+
+        removeButton.textContent =
+            "🗑️ Eliminar";
+
 
         removeButton.onclick = function() {
+
             item.remove();
+
         };
 
 
-        item.appendChild(
-            document.createElement("br")
-        );
+        row.appendChild(productField);
 
-        item.appendChild(
-            document.createTextNode("Producto: ")
-        );
+        row.appendChild(quantityField);
 
-        item.appendChild(select);
+        row.appendChild(removeButton);
 
-        item.appendChild(
-            document.createTextNode(" Cantidad: ")
-        );
 
-        item.appendChild(quantity);
-
-        item.appendChild(
-            document.createTextNode(" ")
-        );
-
-        item.appendChild(removeButton);
+        item.appendChild(row);
 
         container.appendChild(item);
 
         itemIndex++;
+
     }
 
-
-    // Validar también antes de enviar
 
     document.querySelector("form").addEventListener(
         "submit",
@@ -276,13 +596,17 @@
             const uniqueProducts =
                 new Set(selectedProducts);
 
-            if (selectedProducts.length !== uniqueProducts.size) {
+            if (
+                selectedProducts.length !==
+                uniqueProducts.size
+            ) {
 
                 event.preventDefault();
 
                 alert(
                     "No puedes agregar el mismo producto más de una vez."
                 );
+
             }
 
         }

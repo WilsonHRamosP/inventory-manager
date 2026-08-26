@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Inventory Manager</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+        }
+
+        .header {
+            background-color: #212529;
+            color: white;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .card .value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Productos con stock bajo */
+
+        .low-stock {
+            background-color: white;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .low-stock h2 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        .low-stock table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .low-stock th,
+        .low-stock td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .low-stock th {
+            background-color: #f4f6f8;
+        }
+
+        .stock-warning {
+            font-weight: bold;
+        }
+
+        .no-stock-warning {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            color: #555;
+        }
+
+        /* Navegación */
+
+        .navigation {
+            margin-top: 30px;
+        }
+
+        .navigation a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            background-color: #212529;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .navigation a:hover {
+            background-color: #343a40;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Inventory Manager</h1>
+    <p>Dashboard</p>
+</div>
+
+<div class="container">
+
+    <!-- TARJETAS -->
+
+    <div class="cards">
+
+        <div class="card">
+            <h2>📦 Productos</h2>
+
+            <div class="value" th:text="${totalProducts}">
+                0
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏷️ Categorías</h2>
+
+            <div class="value" th:text="${totalCategories}">
+                0
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧾 Ventas</h2>
+
+            <div class="value" th:text="${totalSales}">
+                0
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💰 Ingresos</h2>
+
+            <div class="value">
+                $<span th:text="${totalRevenue}">0</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- PRODUCTOS CON STOCK BAJO -->
+
+    <div class="low-stock">
+
+        <h2>⚠️ Productos con stock bajo</h2>
+
+        <!-- Se muestra si existen productos con stock bajo -->
+
+        <table th:if="${!lowStockProducts.isEmpty()}">
+
+            <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Stock disponible</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:each="product : ${lowStockProducts}">
+
+                <td th:text="${product.name}">
+                    Producto
+                </td>
+
+                <td th:text="${product.category.name}">
+                    Categoría
+                </td>
+
+                <td class="stock-warning"
+                    th:text="${product.stock}">
+                    0
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <!-- Se muestra si NO existen productos con stock bajo -->
+
+        <div class="no-stock-warning"
+             th:if="${lowStockProducts.isEmpty()}">
+
+            ✅ No hay productos con stock bajo.
+
+        </div>
+
+    </div>
+
+
+    <!-- NAVEGACIÓN -->
+
+    <div class="navigation">
+
+        <a href="/dashboard">Dashboard</a>
+
+        <a href="/products">Productos</a>
+
+        <a href="/categories">Categorías</a>
+
+        <a href="/sales">Ventas</a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
