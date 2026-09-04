@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -139,7 +140,8 @@
 
         <h2>🏷️ Categorías</h2>
 
-        <a class="btn" href="/categories/new">
+        <a th:href="@{/categories/new}"
+           sec:authorize="hasRole('ADMIN')">
             + Nueva categoría
         </a>
 
@@ -153,7 +155,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Acciones</th>
+                <th sec:authorize="hasRole('ADMIN')">Acciones</th>
             </tr>
             </thead>
 
@@ -169,16 +171,16 @@
                     Categoría
                 </td>
 
-                <td class="actions">
+                <td class="actions"
+                    sec:authorize="hasRole('ADMIN')">
 
-                    <a class="edit"
-                       th:href="@{/categories/edit/{id}(id=${category.id})}">
+                    <a th:href="@{/categories/edit/{id}(id=${category.id})}"
+                       sec:authorize="hasRole('ADMIN')">
                         ✏️ Editar
                     </a>
 
-                    <a class="delete"
-                       th:href="@{/categories/delete/{id}(id=${category.id})}"
-                       onclick="return confirm('¿Está seguro de eliminar esta categoría?');">
+                    <a th:href="@{/categories/delete/{id}(id=${category.id})}"
+                       sec:authorize="hasRole('ADMIN')">
                         🗑️ Eliminar
                     </a>
 

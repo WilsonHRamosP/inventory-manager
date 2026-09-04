@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -148,7 +149,9 @@
 
         <h2>🧾 Ventas</h2>
 
-        <a class="btn" th:href="@{/sales/new}">
+        <a class="btn"
+           th:href="@{/sales/new}"
+           sec:authorize="hasAnyRole('USER', 'ADMIN')">
             + Nueva venta
         </a>
 
@@ -187,23 +190,28 @@
 
                 <td class="actions">
 
-                    <a class="view"
-                       th:href="@{/sales/view/{id}(id=${sale.id})}">
-                        👁️ Ver
-                    </a>
+                <!-- Ver: ADMIN y USER -->
+                <a class="view"
+                   th:href="@{/sales/view/{id}(id=${sale.id})}">
+                    👁️ Ver
+                </a>
 
-                    <a class="edit"
-                       th:href="@{/sales/edit/{id}(id=${sale.id})}">
-                        ✏️ Editar
-                    </a>
+                <!-- Editar: solo ADMIN -->
+                <a class="edit"
+                   th:href="@{/sales/edit/{id}(id=${sale.id})}"
+                   sec:authorize="hasRole('ADMIN')">
+                    ✏️ Editar
+                </a>
 
-                    <a class="delete"
-                       th:href="@{/sales/delete/{id}(id=${sale.id})}"
-                       onclick="return confirm('¿Está seguro de eliminar esta venta?')">
-                        🗑️ Eliminar
-                    </a>
+                <!-- Eliminar: solo ADMIN -->
+                <a class="delete"
+                   th:href="@{/sales/delete/{id}(id=${sale.id})}"
+                   sec:authorize="hasRole('ADMIN')"
+                   onclick="return confirm('¿Está seguro de eliminar esta venta?')">
+                    🗑️ Eliminar
+                </a>
 
-                </td>
+            </td>
 
             </tr>
 

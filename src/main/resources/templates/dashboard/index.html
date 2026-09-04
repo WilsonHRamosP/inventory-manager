@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,22 +15,69 @@
             background-color: #f4f6f8;
         }
 
+        /* HEADER */
         .header {
             background-color: #212529;
             color: white;
             padding: 20px;
         }
 
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .header h1 {
             margin: 0;
         }
 
+        .header p {
+            margin-bottom: 0;
+        }
+
+        /* BOTÓN CERRAR SESIÓN */
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background-color: #bb2d3b;
+        }
+        .login-btn {
+         display: inline-block;
+         background-color: #198754;
+         color: white;
+         text-decoration: none;
+        padding: 10px 16px;
+         border-radius: 5px;
+           font-size: 14px;
+        font-weight: bold;
+        }
+
+        .login-btn:hover {
+        background-color: #157347;
+        }
+
+        /* CONTENEDOR */
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 30px auto;
         }
 
+        /* TARJETAS */
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -55,8 +103,7 @@
             margin-top: 10px;
         }
 
-        /* Productos con stock bajo */
-
+        /* PRODUCTOS CON STOCK BAJO */
         .low-stock {
             background-color: white;
             margin-top: 30px;
@@ -99,8 +146,7 @@
             color: #555;
         }
 
-        /* Navegación */
-
+        /* NAVEGACIÓN */
         .navigation {
             margin-top: 30px;
         }
@@ -119,19 +165,47 @@
             background-color: #343a40;
         }
     </style>
+
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
-    <h1>Inventory Manager</h1>
+
+    <div class="header-top">
+
+        <h1>Inventory Manager</h1>
+
+        <!-- Si está autenticado -->
+        <form th:action="@{/logout}"
+              method="post"
+              class="logout-form"
+              sec:authorize="isAuthenticated()">
+
+            <button type="submit" class="logout-btn">
+                Cerrar sesión
+            </button>
+
+        </form>
+
+        <!-- Si NO está autenticado -->
+        <a th:href="@{/login}"
+           class="login-btn"
+           sec:authorize="isAnonymous()">
+            Iniciar sesión
+        </a>
+
+    </div>
+
     <p>Dashboard</p>
+
 </div>
+
 
 <div class="container">
 
     <!-- TARJETAS -->
-
     <div class="cards">
 
         <div class="card">
@@ -142,6 +216,7 @@
             </div>
         </div>
 
+
         <div class="card">
             <h2>🏷️ Categorías</h2>
 
@@ -150,6 +225,7 @@
             </div>
         </div>
 
+
         <div class="card">
             <h2>🧾 Ventas</h2>
 
@@ -157,6 +233,7 @@
                 0
             </div>
         </div>
+
 
         <div class="card">
             <h2>💰 Ingresos</h2>
@@ -170,13 +247,11 @@
 
 
     <!-- PRODUCTOS CON STOCK BAJO -->
-
     <div class="low-stock">
 
         <h2>⚠️ Productos con stock bajo</h2>
 
         <!-- Se muestra si existen productos con stock bajo -->
-
         <table th:if="${!lowStockProducts.isEmpty()}">
 
             <thead>
@@ -210,8 +285,8 @@
 
         </table>
 
-        <!-- Se muestra si NO existen productos con stock bajo -->
 
+        <!-- Se muestra si NO existen productos con stock bajo -->
         <div class="no-stock-warning"
              th:if="${lowStockProducts.isEmpty()}">
 
@@ -223,7 +298,6 @@
 
 
     <!-- NAVEGACIÓN -->
-
     <div class="navigation">
 
         <a href="/dashboard">Dashboard</a>
@@ -239,5 +313,4 @@
 </div>
 
 </body>
-
 </html>

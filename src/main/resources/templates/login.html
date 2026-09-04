@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Inventory Manager</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+        }
+
+        .login-container {
+            width: 380px;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0 0 10px 0;
+            color: #212529;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #0d6efd;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0b5ed7;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .logout {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <h1>Inventory Manager</h1>
+
+    <p class="subtitle">Iniciar sesión</p>
+
+
+    <!-- MENSAJE: USUARIO O CONTRASEÑA INCORRECTOS -->
+    <div th:if="${param.error}"
+         class="message error">
+
+        ❌ Usuario o contraseña incorrectos.
+
+    </div>
+
+
+    <!-- MENSAJE: SESIÓN CERRADA -->
+    <div th:if="${param.logout}"
+         class="message logout">
+
+        ✅ Has cerrado sesión correctamente.
+
+    </div>
+
+
+    <!-- FORMULARIO DE LOGIN -->
+    <form th:action="@{/login}" method="post">
+
+        <div class="form-group">
+
+            <label for="username">
+                Usuario
+            </label>
+
+            <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Ingrese su usuario"
+                    autocomplete="username"
+                    required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="password">
+                Contraseña
+            </label>
+
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Ingrese su contraseña"
+                    autocomplete="current-password"
+                    required>
+
+        </div>
+
+
+        <button type="submit">
+            Iniciar sesión
+        </button>
+
+    </form>
+
+
+    <div class="info">
+        Sistema de gestión de inventario
+    </div>
+
+</div>
+
+</body>
+</html>

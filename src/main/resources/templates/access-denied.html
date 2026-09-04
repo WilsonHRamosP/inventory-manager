@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Acceso denegado - Inventory Manager</title>
+
+  <style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-family: Arial, sans-serif;
+
+        background-color: #f4f6f8;
+    }
+
+    .container {
+        width: 450px;
+
+        background-color: white;
+
+        padding: 40px;
+
+        border-radius: 10px;
+
+        text-align: center;
+
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon {
+        font-size: 60px;
+        margin-bottom: 15px;
+    }
+
+    h1 {
+        margin-top: 0;
+
+        color: #dc3545;
+    }
+
+    p {
+        color: #555;
+
+        line-height: 1.6;
+    }
+
+    .message {
+        background-color: #f8d7da;
+
+        color: #842029;
+
+        padding: 15px;
+
+        border-radius: 6px;
+
+        margin: 25px 0;
+    }
+
+    .button {
+        display: inline-block;
+
+        padding: 12px 20px;
+
+        background-color: #212529;
+
+        color: white;
+
+        text-decoration: none;
+
+        border-radius: 5px;
+    }
+
+    .button:hover {
+        background-color: #343a40;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="icon">
+    🚫
+  </div>
+
+  <h1>Acceso denegado</h1>
+
+  <p>
+    No tienes permisos suficientes para realizar esta acción.
+  </p>
+
+  <div class="message">
+
+    Tu usuario no tiene autorización para acceder
+    a esta sección del sistema.
+
+  </div>
+
+  <a th:href="@{/dashboard}" class="button">
+    Volver al Dashboard
+  </a>
+
+</div>
+
+</body>
+
+</html>

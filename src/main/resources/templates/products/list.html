@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -139,7 +140,9 @@
     <div class="top-bar">
         <h2>📦 Productos</h2>
 
-        <a class="btn" th:href="@{/products/new}">
+        <a class="btn"
+           th:href="@{/products/new}"
+           sec:authorize="hasRole('ADMIN')">
             + Nuevo producto
         </a>
     </div>
@@ -156,7 +159,7 @@
                 <th>Precio</th>
                 <th>Stock</th>
                 <th>Categoría</th>
-                <th>Acciones</th>
+                <th sec:authorize="hasRole('ADMIN')">Acciones</th>
             </tr>
             </thead>
 
@@ -190,15 +193,18 @@
                     Categoría
                 </td>
 
-                <td class="actions">
+                <td class="actions"
+                    sec:authorize="hasRole('ADMIN')">
 
                     <a class="edit"
-                       th:href="@{/products/edit/{id}(id=${product.id})}">
+                       th:href="@{/products/edit/{id}(id=${product.id})}"
+                       sec:authorize="hasRole('ADMIN')">
                         ✏️ Editar
                     </a>
 
                     <a class="delete"
                        th:href="@{/products/delete/{id}(id=${product.id})}"
+                       sec:authorize="hasRole('ADMIN')"
                        onclick="return confirm('¿Está seguro de eliminar este producto?');">
                         🗑️ Eliminar
                     </a>
